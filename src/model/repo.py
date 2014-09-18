@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 
 class Repo(db.Model):
+    owner = db.StringProperty(indexed=False)
     stars = db.IntegerProperty(indexed=False)
     forks = db.IntegerProperty(indexed=False)
     contributors = db.IntegerProperty(indexed=False)
