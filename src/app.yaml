@@ -10,6 +10,8 @@ builtins:
 - appstats: on
 
 handlers:
+- url: /users/github/pull
+  script: handlers.rest.users.app
 
 ######################### REST ENDPOINTS #########################
 
