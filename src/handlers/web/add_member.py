@@ -4,6 +4,11 @@ from google.appengine.api import users
 import logging
 
 from model.user import User
+<<<<<<< HEAD
+=======
+
+from handlers.web.auth import get_github_auth_url, get_dribbble_auth_url
+>>>>>>> b56ce98... passing auth urls to expose thrid party page
 
 class AddMemberPage(WebRequestHandler):
     def get(self):
@@ -18,7 +23,7 @@ class ExposeThirdPartyPage(WebRequestHandler):
         path = 'member/expose_social_data.html'
         user = users.get_current_user()
         User.get_or_insert(key_name=user.email())
-        template_values = {'name':user.nickname()}
+        template_values = {'name':user.nickname(), 'github_auth_url': get_github_auth_url(), 'dribbble_auth_url': get_dribbble_auth_url()}
         self.write(self.get_rendered_html(path, template_values), 200)
 
 app = webapp2.WSGIApplication(
