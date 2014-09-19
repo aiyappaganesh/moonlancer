@@ -10,17 +10,17 @@ builtins:
 - appstats: on
 
 handlers:
-- url: /users/github/pull
-  script: handlers.rest.users.app
-
 - url: /users/github/authorize
   script: handlers.web.auth.app
 
-- url: /users/handle_linkedin_auth
-  script: handlers.rest.users.app
-
 - url: /users/github/callback
   script: handlers.web.auth.app
+
+- url: /users/handle_linkedin_auth
+  script: handlers.web.users.app
+
+- url: /api/users/github/pull
+  script: handlers.rest.users.app
 
 libraries:
 - name: django
