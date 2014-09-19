@@ -4,6 +4,7 @@ from google.appengine.api import users
 import logging
 
 from model.user import User
+from model.company import Company
 from handlers.web.auth import get_github_auth_url, get_dribbble_auth_url
 
 class AddMemberPage(WebRequestHandler):
@@ -22,9 +23,20 @@ class ExposeThirdPartyPage(WebRequestHandler):
         template_values = {'name':user.nickname(), 'github_auth_url': get_github_auth_url(), 'dribbble_auth_url': get_dribbble_auth_url()}
         self.write(self.get_rendered_html(path, template_values), 200)
 
+class AddCompanyPage(WebRequestHandler):
+    def get(self):
+        #InputName=a&InputEmail=a%40b.com&InputEmail=a%40b.com&InputMessage=a&submit=Submit
+        c = Company()
+        c.name = self['InputName']
+        c.email = self['InputEmail']
+        c.details = self['InputMessage']
+        c.put()
+        self.redirect('/add_member')
+
 app = webapp2.WSGIApplication(
     [
         ('/member/add', AddMemberPage),
-        ('/member/expose_third_party', ExposeThirdPartyPage)
+        ('/member/expose_third_party', ExposeThirdPartyPage),
+        ('/add_company', AddCompanyPage)
     ]
 )
