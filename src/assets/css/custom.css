@@ -1,3 +1,7 @@
 .top-padded {
     padding-top: 50px;
 }
+
+.min-page-height {
+    min-height: 650px;
+}
