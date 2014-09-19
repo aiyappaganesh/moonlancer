@@ -46,6 +46,8 @@ handlers:
   secure: never
 
 ######################### WEB ENDPOINTS #########################
+- url: /add_member
+  script: handlers.web.add_member.app
 
 - url: /.*
   script: handlers.web.index.app
