@@ -4,11 +4,7 @@ from google.appengine.api import users
 import logging
 
 from model.user import User
-<<<<<<< HEAD
-=======
-
 from handlers.web.auth import get_github_auth_url, get_dribbble_auth_url
->>>>>>> b56ce98... passing auth urls to expose thrid party page
 
 class AddMemberPage(WebRequestHandler):
     def get(self):
