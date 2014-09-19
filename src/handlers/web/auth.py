@@ -7,12 +7,13 @@ import json
 from google.appengine.ext.webapp import template
 from google.appengine.api import urlfetch
 from google.appengine.ext import deferred
+from google.appengine.api import users
 
 import github_config as github
 import dribbble_config as dribbble
 from model.third_party_user import ThirdPartyUser
 from model.user import User
-from networks import GITHUB
+from networks import GITHUB, DRIBBBLE
 
 from util import linkedin
 
@@ -29,17 +30,16 @@ def get_dribbble_auth_url():
 	return "%s?%s"%(dribbble.AUTH_URL, urllib.urlencode(params))
 
 def fetch_and_save_github_user(access_token):
-	response = json.loads(urlfetch.fetch(github.USER_EMAILS_URL%access_token).content)
-	for email in response:
-		if email['primary']:
-			logging.info(email['email'])
-			user = User.get_by_key_name(email['email'])
-	if not user:
-		user = User(key_name=email['email'])
-		user.put()
+	email = users.get_current_user().email()
+	user = User.get_by_key_name(email)
 	response = json.loads(urlfetch.fetch(github.USER_URL%access_token).content)
 	id, followers = response['login'], response['followers']
 	ThirdPartyUser(key_name=GITHUB, parent=user, access_token=access_token, id=id, followers=followers).put()
+
+def fetch_and_save_dribbble_user(access_token):
+	email = users.get_current_user().email()
+	user = User.get_by_key_name(email)
+	ThirdPartyUser(key_name=DRIBBBLE, parent=user, access_token=access_token).put()
 
 class GitHubAuthHandler(webapp2.RequestHandler):
 	def get(self):
@@ -52,7 +52,6 @@ class GitHubCallbackHandler(webapp2.RequestHandler):
 		code = self.request.get('code')
 		response = urlfetch.fetch(get_github_access_token_url(code)).content
 		access_token = response.split('&')[0].split('=')[1]
-		logging.info(access_token)
 		fetch_and_save_github_user(access_token)
 
 class LinkedInAuthHandler(webapp2.RequestHandler):
@@ -71,7 +70,7 @@ class DribbbleCallbackHandler(webapp2.RequestHandler):
 		params = {'code': code, 'client_id': dribbble.CLIENT_ID, 'client_secret': dribbble.CLIENT_SECRET}
 		response = json.loads(urlfetch.fetch(dribbble.ACCESS_TOKEN_URL, payload=urllib.urlencode(params), method=urlfetch.POST).content)
 		access_token = response['access_token']
-		logging.info(access_token)
+		fetch_and_save_dribbble_user(access_token)
 
 app = webapp2.WSGIApplication([	('/users/github/authorize', GitHubAuthHandler),
 								('/users/github/callback', GitHubCallbackHandler),

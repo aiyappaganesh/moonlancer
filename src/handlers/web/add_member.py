@@ -1,6 +1,9 @@
 import webapp2
 from handlers.web import WebRequestHandler
 from google.appengine.api import users
+import logging
+
+from model.user import User
 
 class AddMemberPage(WebRequestHandler):
     def get(self):
@@ -14,6 +17,7 @@ class ExposeThirdPartyPage(WebRequestHandler):
     def get(self):
         path = 'member/expose_social_data.html'
         user = users.get_current_user()
+        User.get_or_insert(key_name=user.email())
         template_values = {'name':user.nickname()}
         self.write(self.get_rendered_html(path, template_values), 200)
 
