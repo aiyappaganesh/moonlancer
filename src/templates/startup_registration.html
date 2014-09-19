@@ -7,13 +7,36 @@
 
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css" />
+	<link href="/assets/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
 
     <script type="text/javascript" src="/assets/js/jquery.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<div class="container">
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Moonlancer</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/startup_registration">Register Startup</a></li>
+        <li><a href="#">Hire Startup</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<div class="container top-padded">
 
 <div class="page-header">
     <h1>Register your startup <small>Enter your startup's details to get started</small></h1>
@@ -56,20 +79,29 @@
                 <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
             </div>
         </form>
-        <div class="col-lg-5 col-md-push-1">
-            <div class="col-md-12">
-                <div class="alert alert-success">
-                    <strong><span class="glyphicon glyphicon-ok"></span> Success! Message sent.</strong>
-                </div>
-                <div class="alert alert-danger">
-                    <span class="glyphicon glyphicon-remove"></span><strong> Error! Please check all page inputs.</strong>
-                </div>
-            </div>
-        </div>
+        <!--<div class="col-lg-5 col-md-push-1">-->
+            <!--<div class="col-md-12">-->
+                <!--<div class="alert alert-success">-->
+                    <!--<strong><span class="glyphicon glyphicon-ok"></span> Success! Message sent.</strong>-->
+                <!--</div>-->
+                <!--<div class="alert alert-danger">-->
+                    <!--<span class="glyphicon glyphicon-remove"></span><strong> Error! Please check all page inputs.</strong>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
 </div>
 <!-- Registration form - END -->
 
+</div>
+<div id="footer">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+                <p class="copyright">Copyright &copy; 2014 - Beagle Boys</p>
+        </div>
+    </div>
+</div>
 </div>
 
 </body>
