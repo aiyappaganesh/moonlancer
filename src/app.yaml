@@ -18,19 +18,15 @@ handlers:
 
 - url: /assets/css
   static_dir: assets/css
-  secure: never
 
 - url: /assets/js
   static_dir: assets/js
-  secure: never
 
 - url: /assets/img
   static_dir: assets/img
-  secure: never
 
 - url: /assets/fonts
   static_dir: assets/fonts
-  secure: never
 
 ######################### WEB ENDPOINTS #########################
 - url: /users/.*
