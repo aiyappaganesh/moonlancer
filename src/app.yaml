@@ -10,21 +10,8 @@ builtins:
 - appstats: on
 
 handlers:
-- url: /users/github/authorize
-  script: handlers.web.auth.app
-
-- url: /users/github/callback
-  script: handlers.web.auth.app
-
-- url: /users/handle_linkedin_auth
-  script: handlers.web.users.app
-
-- url: /api/users/github/pull
-  script: handlers.rest.users.app
-
 ######################### REST ENDPOINTS #########################
-
-- url: /users/.*
+- url: /api/users/github/pull
   script: handlers.rest.users.app
 
 ######################### STATIC ENDPOINTS #########################
@@ -46,6 +33,9 @@ handlers:
   secure: never
 
 ######################### WEB ENDPOINTS #########################
+- url: /users/.*
+  script: handlers.web.auth.app
+
 - url: /member/.*
   script: handlers.web.add_member.app
 
