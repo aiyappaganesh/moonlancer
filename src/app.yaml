@@ -13,15 +13,14 @@ handlers:
 - url: /users/github/pull
   script: handlers.rest.users.app
 
-######################### REST ENDPOINTS #########################
+- url: /users/github/authorize
+  script: handlers.web.auth.app
 
-- url: /users/.*
+- url: /users/handle_linkedin_auth
   script: handlers.rest.users.app
 
-######################### STATIC ENDPOINTS #########################
-
-
-######################### WEB ENDPOINTS #########################
+- url: /users/github/callback
+  script: handlers.web.auth.app
 
 libraries:
 - name: django
