@@ -12,9 +12,10 @@ class AddMemberPage(WebRequestHandler):
 
 class ExposeThirdPartyPage(WebRequestHandler):
     def get(self):
+        path = 'member/expose_social_data.html'
         user = users.get_current_user()
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, ' + user.nickname())
+        template_values = {'name':user.nickname()}
+        self.write(self.get_rendered_html(path, template_values), 200)
 
 app = webapp2.WSGIApplication(
     [
