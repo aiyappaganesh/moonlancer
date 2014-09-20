@@ -14,8 +14,16 @@ def pull_data(user, third_party_user):
     recommenders = response['numRecommenders']
     patents = response['patents']['_total'] if 'patents' in response else None
     publications = response['publications']['_total'] if 'publications' in response else None
+    skills = [skill['skill']['name'] for skill in response['skills']['values']] if 'skills' in response and response['skills']['_total'] > 0 else None
 
     influence_raw = (4 * connections) + (4 * recommenders) + (1 * patents) + (1 * publications)
     influence = math.log(influence_raw)/10.0
+    expertise = ''
+    for skill in skills:
+    	expertise = expertise + skill +':0.5,'
+    
     user.influence = influence if influence < 1.0 else 1.0
+    user.expertise = expertise
     user.put()
+
+
