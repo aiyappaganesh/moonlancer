@@ -11,7 +11,7 @@ builtins:
 
 handlers:
 ######################### REST ENDPOINTS #########################
-- url: /api/users/github/pull
+- url: /api/users/.*
   script: handlers.rest.users.app
 
 ######################### STATIC ENDPOINTS #########################

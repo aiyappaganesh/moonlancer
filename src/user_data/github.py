@@ -11,8 +11,6 @@ import github_config as github
 
 def pull_repos(user, third_party_user):
     response = json.loads(urlfetch.fetch(github.REPOS_URL%third_party_user.access_token).content)
-    logging.info(user.name)
-    logging.info(third_party_user.access_token)
     for repo in response:
         name, owner, language, forks, stars = repo['name'], repo['owner']['login'], repo['language'], repo['forks_count'], repo['stargazers_count']
         Repo(parent=user, name=name, owner=owner, language=language, forks=forks, stars=stars).put()

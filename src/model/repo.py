@@ -7,4 +7,3 @@ class Repo(db.Model):
     forks = db.IntegerProperty(indexed=False)
     contributors = db.IntegerProperty(indexed=False)
     language = db.StringProperty(indexed=False)
-    #origanization = db.StringProperty(indexed=False)

@@ -93,6 +93,8 @@ class DribbbleCallbackHandler(webapp2.RequestHandler):
 		code = self.request.get('code')
 		params = {'code': code, 'client_id': dribbble.CLIENT_ID, 'client_secret': dribbble.CLIENT_SECRET}
 		response = json.loads(urlfetch.fetch(dribbble.ACCESS_TOKEN_URL, payload=urllib.urlencode(params), method=urlfetch.POST).content)
+		logging.info('callbak-----')
+		logging.info(response)
 		access_token = response['access_token']
 		fetch_and_save_dribbble_user(access_token)
 

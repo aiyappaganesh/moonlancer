@@ -1,15 +1,31 @@
 import webapp2
-from webapp2 import RequestHandler
+import logging
+
 from model.third_party_user import ThirdPartyUser
 from model.user import User
-from networks import GITHUB
-from user_data import github
+from networks import GITHUB, DRIBBBLE, LINKEDIN
+from user_data import github, dribbble
 
-class GitHubDataPullHandler(RequestHandler):
+
+networks = {
+	GITHUB: github,
+	DRIBBBLE: dribbble
+}
+
+class GitHubDataPullHandler(webapp2.RequestHandler):
     def get(self):
         email = self.request.get('email')
         user = User.get_by_key_name(email)
         third_party_user = ThirdPartyUser.get_by_key_name(GITHUB, parent=user)
         github.pull_data(user, third_party_user)
 
-app = webapp2.WSGIApplication([('/api/users/github/pull', GitHubDataPullHandler)])
+class UserDataPullHandler(webapp2.RequestHandler):
+	def get(self):
+		network = self.request.get('network')
+		email = self.request.get('email')
+		user = User.get_by_key_name(email)
+		third_party_user = ThirdPartyUser.get_by_key_name(network, parent=user)
+		networks[network].pull_data(user, third_party_user)
+
+app = webapp2.WSGIApplication([	('/api/users/github/pull', GitHubDataPullHandler),
+								('/api/users/pull_data', UserDataPullHandler)])

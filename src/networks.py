@@ -1,2 +1,3 @@
-GITHUB = 'GitHub'
-DRIBBBLE = 'Dribbble'
+GITHUB = 'github'
+DRIBBBLE = 'dribbble'
+LINKEDIN = 'linkedin'
