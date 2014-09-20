@@ -14,7 +14,7 @@ import dribbble_config as dribbble
 import linkedin_config as linkedin
 from model.third_party_user import ThirdPartyUser
 from model.user import User
-from networks import GITHUB, DRIBBBLE
+from networks import GITHUB, DRIBBBLE, LINKEDIN
 
 def get_github_auth_url():
 	params = {'client_id': github.CLIENT_ID, 'redirect_uri': github.REDIRECT_URL, 'scope': github.SCOPE}
@@ -56,6 +56,11 @@ def fetch_and_save_dribbble_user(access_token):
 	user = User.get_by_key_name(email)
 	ThirdPartyUser(key_name=DRIBBBLE, parent=user, access_token=access_token).put()
 
+def fetch_and_save_linkedin_user(access_token):
+	email = users.get_current_user().email()
+	user = User.get_by_key_name(email)
+	ThirdPartyUser(key_name=LINKEDIN, parent=user, access_token=access_token).put()
+
 class GitHubAuthHandler(webapp2.RequestHandler):
 	def get(self):
 		template_values = {'github_auth_url' : get_github_auth_url()}
@@ -78,9 +83,9 @@ class LinkedInCallbackHandler(webapp2.RequestHandler):
         resp_code = str(self.request.get('code'))
         resp_state = str(self.request.get('state'))
         if resp_state == linkedin.STATE:
-            response = urlfetch.fetch(get_linkedin_access_token_url(self.request.get('code')), method=urlfetch.POST).content
-            resp_json = json.loads(response)
-            logging.info(resp_json['access_token'])
+            response = json.loads(urlfetch.fetch(get_linkedin_access_token_url(self.request.get('code')), method=urlfetch.POST).content)
+            access_token = response['access_token']
+            fetch_and_save_linkedin_user(access_token)
 
 class DribbbleAuthHandler(webapp2.RequestHandler):
 	def get(self):

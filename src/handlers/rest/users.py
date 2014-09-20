@@ -4,12 +4,13 @@ import logging
 from model.third_party_user import ThirdPartyUser
 from model.user import User
 from networks import GITHUB, DRIBBBLE, LINKEDIN
-from user_data import github, dribbble
+from user_data import github, dribbble, linkedin
 
 
 networks = {
 	GITHUB: github,
-	DRIBBBLE: dribbble
+	DRIBBBLE: dribbble,
+	LINKEDIN: linkedin
 }
 
 class GitHubDataPullHandler(webapp2.RequestHandler):
