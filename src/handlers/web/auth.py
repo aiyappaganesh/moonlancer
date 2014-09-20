@@ -11,11 +11,10 @@ from google.appengine.api import users
 
 import github_config as github
 import dribbble_config as dribbble
+import linkedin_config as linkedin
 from model.third_party_user import ThirdPartyUser
 from model.user import User
 from networks import GITHUB, DRIBBBLE
-
-from util import linkedin
 
 def get_github_auth_url():
 	params = {'client_id': github.CLIENT_ID, 'redirect_uri': github.REDIRECT_URL, 'scope': github.SCOPE}
@@ -28,6 +27,22 @@ def get_github_access_token_url(code):
 def get_dribbble_auth_url():
 	params = {'client_id': dribbble.CLIENT_ID, 'redirect_uri': dribbble.REDIRECT_URL, 'scope': dribbble.SCOPE}
 	return "%s?%s"%(dribbble.AUTH_URL, urllib.urlencode(params))
+
+def get_linkedin_auth_url():
+    params = {'response_type' : linkedin.RESPONSE_TYPE,
+              'client_id' : linkedin.CLIENT_ID,
+              'scope' : linkedin.SCOPE,
+              'state' : linkedin.STATE,
+              'redirect_uri' : linkedin.REDIRECT_URI}
+    return "%s?%s"%(linkedin.AUTHORIZATION_URL, urllib.urlencode(params))
+
+def get_linkedin_access_token_url(code):
+    params = {'grant_type' : 'authorization_code',
+              'code' : code,
+              'redirect_uri' : linkedin.REDIRECT_URI,
+              'client_id' : linkedin.CLIENT_ID,
+              'client_secret' : linkedin.CLIENT_SECRET}
+    return "%s?%s"%(linkedin.ACCESS_TOKEN_URL, urllib.urlencode(params))
 
 def fetch_and_save_github_user(access_token):
 	email = users.get_current_user().email()
@@ -56,7 +71,16 @@ class GitHubCallbackHandler(webapp2.RequestHandler):
 
 class LinkedInAuthHandler(webapp2.RequestHandler):
     def get(self):
-        linkedin.get_access_token(self)
+        response = urlfetch.fetch(get_linkedin_auth_url()).content
+
+class LinkedInCallbackHandler(webapp2.RequestHandler):
+    def get(self):
+        resp_code = str(self.request.get('code'))
+        resp_state = str(self.request.get('state'))
+        if resp_state == linkedin.STATE:
+            response = urlfetch.fetch(get_linkedin_access_token_url(self.request.get('code')), method=urlfetch.POST).content
+            resp_json = json.loads(response)
+            logging.info(resp_json['access_token'])
 
 class DribbbleAuthHandler(webapp2.RequestHandler):
 	def get(self):
@@ -76,4 +100,5 @@ app = webapp2.WSGIApplication([	('/users/github/authorize', GitHubAuthHandler),
 								('/users/github/callback', GitHubCallbackHandler),
 								('/users/dribbble/authorize', DribbbleAuthHandler),
 								('/users/dribbble/callback', DribbbleCallbackHandler),
-								('/users/handle_linkedin_auth', LinkedInAuthHandler)])
+								('/users/linkedin/authorize', LinkedInAuthHandler),
+                                ('/users/handle_linkedin_auth', LinkedInCallbackHandler)])
